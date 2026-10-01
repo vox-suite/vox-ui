@@ -113,7 +113,7 @@ export function SpaceChatPanel({
   };
 
   return (
-    <div className="flex h-full w-80 sm:w-96 flex-col border-l border-zinc-800/80 bg-zinc-950/70 backdrop-blur-xl">
+    <div className="flex h-full w-full flex-col bg-zinc-950/70 backdrop-blur-xl md:w-96 md:border-l md:border-zinc-800/80">
       <div className="border-b border-zinc-800/80 p-4 shrink-0">
         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-400">
           <Sparkles className="h-3.5 w-3.5 text-indigo-400" />

@@ -74,7 +74,7 @@ export function SpacesView() {
   }
 
   return (
-    <div className="flex flex-col h-full w-full overflow-y-auto bg-[#090a0f] p-6 text-zinc-100">
+    <div className="flex flex-col h-full w-full overflow-y-auto bg-[#090a0f] p-4 text-zinc-100 sm:p-6">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-zinc-800/80 pb-4">
         <div>
           <div className="flex items-center gap-2">

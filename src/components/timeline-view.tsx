@@ -117,8 +117,8 @@ export function TimelineView({
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-[#07080a]">
       {/* View Header */}
-      <header className="flex items-center justify-between gap-4 border-b border-white/[0.06] bg-ink/80 px-6 py-3">
-        <div className="flex min-w-0 items-center gap-3.5">
+      <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-white/[0.06] bg-ink/80 px-3 py-2.5 sm:px-6 sm:py-3">
+        <div className="flex min-w-0 flex-1 items-center gap-3.5">
           {onBack ? (
             <Button
               variant="secondary"
@@ -161,7 +161,7 @@ export function TimelineView({
           ) : null}
         </div>
 
-        <div className="no-drag flex items-center gap-2.5">
+        <div className="no-drag flex w-full items-center justify-between gap-2.5 sm:w-auto sm:justify-end">
           <Button
             variant="secondary"
             size="icon"

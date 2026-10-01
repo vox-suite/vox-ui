@@ -41,8 +41,10 @@ Tailwind v4 consumers must scan the package sources:
 `webview/` is a small standalone app that renders the Timeline, Pulse and Spaces screens for native hosts. It is built with relative asset paths, so a host can serve it from any base path.
 
 - Routes are hash based: `#/timeline` (default), `#/pulse`, `#/spaces`. The native navigation loads the route it wants.
-- The host exposes `window.VoxHost.getSession()`, returning a JSON string `{ "apiUrl", "token", "expiresAt" }`. The bundle calls it again when the token is near expiry or the API answers 401, so the host should return a fresh web token each time.
+- The host exposes `window.VoxHost.getSession()`, returning a JSON string `{ "apiUrl", "token", "expiresAt" }`. The bundle calls it again when the token is near expiry or the API answers 401, so the host should return a fresh web token each time. If it cannot produce a session it should return `{ "error": "<message>" }`, which the bundle surfaces as the error text.
 - In `npm run dev:webview` you can skip the host with `?apiUrl=<url>&token=<token>` on the URL.
+- Layers: `#/pulse` and `#/spaces` show a small Pulse | Spaces switch at the top; the host does not need its own switcher.
+- Fonts (Inter, Geist Mono, latin subset) are bundled, so the page works offline.
 - The theme comes from `src/styles/theme.css`, also exported as `@vox/ui/theme.css` for other apps.
 
 ```bash

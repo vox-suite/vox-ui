@@ -42,7 +42,12 @@ export function useSpans(query: SpanQuery, enabled = true) {
   useEffect(() => {
     if (!enabled) return;
     return platform().live.subscribe((payload) => {
-      if (payload.type.startsWith(SPAN_EVENT_PREFIX)) void load();
+      if (
+        payload.type.startsWith(SPAN_EVENT_PREFIX) ||
+        payload.type === "live_reconnected"
+      ) {
+        void load();
+      }
     });
   }, [enabled, load]);
 

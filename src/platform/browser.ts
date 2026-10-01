@@ -80,6 +80,7 @@ export function createBrowserPlatform(
   let socket: WebSocket | null = null;
   let retryTimer: ReturnType<typeof setTimeout> | undefined;
   let attempt = 0;
+  let hasConnected = false;
 
   const connect = async () => {
     if (handlers.size === 0) return;
@@ -92,6 +93,10 @@ export function createBrowserPlatform(
       socket = ws;
       ws.onopen = () => {
         attempt = 0;
+        if (hasConnected) {
+          handlers.forEach((handler) => handler({ type: "live_reconnected" }));
+        }
+        hasConnected = true;
       };
       ws.onmessage = (message) => {
         try {

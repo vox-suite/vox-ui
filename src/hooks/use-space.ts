@@ -73,6 +73,11 @@ export function useSpace(spaceId: string | null) {
     if (!spaceId) return;
     let debounceTimer: ReturnType<typeof setTimeout> | undefined;
     const unsubscribe = platform().live.subscribe((payload) => {
+      if (payload.type === "live_reconnected") {
+        void loadGraph();
+        void loadMessages();
+        return;
+      }
       if (!payload.type.startsWith("space_") || payload.space_id !== spaceId) {
         return;
       }

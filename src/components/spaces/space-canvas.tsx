@@ -15,10 +15,13 @@ import "@xyflow/react/dist/style.css";
 import {
   ArrowLeft,
   CheckCircle2,
+  MessageSquare,
   Compass,
   Flag,
   RotateCw,
+  X,
 } from "lucide-react";
+import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -204,8 +207,11 @@ function SpaceCanvasInner({
     [onUpdateNode]
   );
 
+  const [chatOpen, setChatOpen] = useState(false);
+
   const handleNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
     setSelectedNodeId(node.id);
+    setChatOpen(true);
   }, []);
 
   const selectedNode = useMemo(
@@ -232,8 +238,8 @@ function SpaceCanvasInner({
   return (
     <div className="flex h-full w-full overflow-hidden bg-[#090a0f] text-zinc-100">
       <div className="relative flex flex-1 flex-col overflow-hidden">
-        <header className="z-10 flex items-center justify-between border-b border-zinc-800/80 bg-zinc-950/80 px-5 py-3 backdrop-blur-md">
-          <div className="flex items-center gap-3">
+        <header className="z-10 flex items-center justify-between gap-2 border-b border-zinc-800/80 bg-zinc-950/80 px-3 py-2.5 backdrop-blur-md sm:px-5 sm:py-3">
+          <div className="flex min-w-0 items-center gap-3">
             <Button
               variant="ghost"
               size="sm"
@@ -242,10 +248,10 @@ function SpaceCanvasInner({
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <Compass className="h-4 w-4 text-indigo-400" />
-                <h1 className="text-base font-bold text-zinc-100">
+                <h1 className="truncate text-base font-bold text-zinc-100">
                   {graph.space.title}
                 </h1>
                 <span
@@ -270,11 +276,21 @@ function SpaceCanvasInner({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setChatOpen((open) => !open)}
+              className="h-8 w-8 p-1.5 text-zinc-300 hover:text-zinc-100 md:hidden"
+              title="Chat"
+            >
+              <MessageSquare className="h-4 w-4" />
+            </Button>
             {isCommitted ? (
               <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg">
                 <CheckCircle2 className="h-4 w-4" />
-                <span>Committed to Timeline</span>
+                <span className="hidden sm:inline">Committed to Timeline</span>
+                <span className="sm:hidden">Committed</span>
               </div>
             ) : (
               <Button
@@ -288,7 +304,8 @@ function SpaceCanvasInner({
                 ) : (
                   <Flag className="h-3.5 w-3.5" />
                 )}
-                <span>Commit to Timeline</span>
+                <span className="hidden sm:inline">Commit to Timeline</span>
+                <span className="sm:hidden">Commit</span>
               </Button>
             )}
           </div>
@@ -325,7 +342,7 @@ function SpaceCanvasInner({
             <Background color="#1e1e24" gap={20} size={1} />
             <Controls className="!bg-zinc-900 !border-zinc-800 !text-zinc-300" />
             <MiniMap
-              className="!bg-zinc-950/90 !border !border-zinc-800"
+              className="!bg-zinc-950/90 !border !border-zinc-800 max-md:!hidden"
               nodeColor={() => "#6366f1"}
               maskColor="rgba(0, 0, 0, 0.7)"
             />
@@ -333,15 +350,40 @@ function SpaceCanvasInner({
         </div>
       </div>
 
-      <SpaceChatPanel
-        space={graph.space}
-        messages={messages}
-        selectedNode={selectedNode}
-        staleNodes={staleNodes}
-        sending={sending}
-        onSendMessage={onSendMessage}
-        onUpdateNode={onUpdateNode}
-      />
+      <div
+        className={cn(
+          "md:contents",
+          chatOpen
+            ? "max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-30 max-md:flex max-md:h-[78%] max-md:flex-col max-md:overflow-hidden max-md:rounded-t-2xl max-md:border-t max-md:border-zinc-800 max-md:bg-zinc-950 max-md:shadow-2xl"
+            : "max-md:hidden",
+        )}
+      >
+        <div className="flex items-center justify-between border-b border-zinc-800/80 px-4 py-2 md:hidden">
+          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            Space chat
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setChatOpen(false)}
+            className="h-7 w-7 p-1 text-zinc-400 hover:text-zinc-100"
+            title="Close"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+        <div className="min-h-0 flex-1 md:contents">
+          <SpaceChatPanel
+            space={graph.space}
+            messages={messages}
+            selectedNode={selectedNode}
+            staleNodes={staleNodes}
+            sending={sending}
+            onSendMessage={onSendMessage}
+            onUpdateNode={onUpdateNode}
+          />
+        </div>
+      </div>
 
       <Dialog open={showCommitDialog} onOpenChange={setShowCommitDialog}>
         <DialogContent className="max-w-md bg-zinc-950 border-zinc-800 text-zinc-100">

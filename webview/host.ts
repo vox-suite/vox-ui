@@ -8,7 +8,11 @@ declare global {
 
 export async function hostSession(): Promise<BrowserSession> {
   if (window.VoxHost) {
-    return JSON.parse(await window.VoxHost.getSession()) as BrowserSession;
+    const parsed = JSON.parse(await window.VoxHost.getSession()) as BrowserSession & {
+      error?: string;
+    };
+    if (parsed.error) throw new Error(parsed.error);
+    return parsed;
   }
   if (import.meta.env.DEV) {
     const params = new URLSearchParams(window.location.search);

@@ -19,6 +19,34 @@ function readRoute(): Route {
   return name === "pulse" || name === "spaces" ? name : "timeline";
 }
 
+const LAYERS: { id: Route; label: string }[] = [
+  { id: "pulse", label: "Pulse" },
+  { id: "spaces", label: "Spaces" },
+];
+
+function LayerSwitch({ route }: { route: Route }) {
+  return (
+    <nav className="flex shrink-0 gap-1 border-b border-white/[0.06] bg-ink/80 p-2">
+      {LAYERS.map((layer) => (
+        <button
+          key={layer.id}
+          type="button"
+          onClick={() => {
+            window.location.hash = `/${layer.id}`;
+          }}
+          className={
+            route === layer.id
+              ? "flex-1 rounded-md bg-white/10 px-3 py-1.5 text-xs font-medium text-white"
+              : "flex-1 rounded-md px-3 py-1.5 text-xs font-medium text-white/50"
+          }
+        >
+          {layer.label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
 function TimelineScreen() {
   const { collections } = useCollections(true);
   return <TimelineView collections={collections} />;
@@ -35,6 +63,7 @@ export function App() {
 
   return (
     <div className="flex h-full w-full flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
+      {route === "timeline" ? null : <LayerSwitch route={route} />}
       <Suspense fallback={null}>
         {route === "pulse" ? (
           <PulseView />

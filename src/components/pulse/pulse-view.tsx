@@ -32,7 +32,7 @@ export function PulseView() {
   }
 
   return (
-    <div className="flex flex-col h-full w-full overflow-y-auto bg-[#0b0c0e] p-6 text-zinc-100">
+    <div className="flex flex-col h-full w-full overflow-y-auto bg-[#0b0c0e] p-4 text-zinc-100 sm:p-6">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-zinc-800/80 pb-4">
         <div>
           <div className="flex items-center gap-2">

@@ -1,6 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { spacesApi } from "../features/spaces/api";
 import type { Space } from "../features/spaces/types";
+import { platform } from "../platform";
+
+const LIST_EVENTS = new Set([
+  "space_created",
+  "space_dropped",
+  "space_committed",
+  "space_updated",
+  "space_run_started",
+  "space_run_finished",
+  "space_run_failed",
+  "live_reconnected",
+]);
 
 export function useSpaces(enabled = true) {
   const [spaces, setSpaces] = useState<Space[]>([]);
@@ -28,6 +40,13 @@ export function useSpaces(enabled = true) {
   useEffect(() => {
     if (!enabled) return;
     queueMicrotask(() => void load());
+  }, [enabled, load]);
+
+  useEffect(() => {
+    if (!enabled) return;
+    return platform().live.subscribe((payload) => {
+      if (LIST_EVENTS.has(payload.type)) void load();
+    });
   }, [enabled, load]);
 
   const create = useCallback(
