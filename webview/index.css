@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@source "../src";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "../src/styles/theme.css";
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--background);
+  }
+
+  body {
+    @apply text-foreground font-sans antialiased;
+    font-feature-settings: "calt", "kern", "liga", "ss03";
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+}

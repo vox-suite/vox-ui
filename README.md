@@ -21,7 +21,7 @@ installPlatform({ http, live });
 - `http.request({ method, path, query, body, timeoutMs })` returns the parsed JSON body of a `/v1/...` call.
 - `live.subscribe(handler)` delivers live events and returns an unsubscribe function.
 
-Entry points: `@vox/ui` (Timeline, Collections, hooks, types, platform), `@vox/ui/pulse`, `@vox/ui/spaces`, `@vox/ui/ui/*`, `@vox/ui/logo`, `@vox/ui/utils`.
+Entry points: `@vox/ui` (Timeline, Collections, hooks, types, platform, `createBrowserPlatform`), `@vox/ui/pulse`, `@vox/ui/spaces`, `@vox/ui/ui/*`, `@vox/ui/logo`, `@vox/ui/utils`, `@vox/ui/theme.css`.
 
 Tailwind v4 consumers must scan the package sources:
 
@@ -35,6 +35,22 @@ Tailwind v4 consumers must scan the package sources:
 - Send it as `Authorization: Bearer <token>` on every request.
 - Open the live socket at `/v1/me/events/socket` with the subprotocols `["vox.v1", "bearer.<token>"]`. Browsers cannot set headers on a WebSocket, so the token travels in the subprotocol.
 - The API must list the host origin in `VOX_CORS_ALLOWED_ORIGINS`. `https://appassets.androidplatform.net` is allowed by default.
+
+## WebView bundle
+
+`webview/` is a small standalone app that renders the Timeline, Pulse and Spaces screens for native hosts. It is built with relative asset paths, so a host can serve it from any base path.
+
+- Routes are hash based: `#/timeline` (default), `#/pulse`, `#/spaces`. The native navigation loads the route it wants.
+- The host exposes `window.VoxHost.getSession()`, returning a JSON string `{ "apiUrl", "token", "expiresAt" }`. The bundle calls it again when the token is near expiry or the API answers 401, so the host should return a fresh web token each time.
+- In `npm run dev:webview` you can skip the host with `?apiUrl=<url>&token=<token>` on the URL.
+- The theme comes from `src/styles/theme.css`, also exported as `@vox/ui/theme.css` for other apps.
+
+```bash
+npm run build:webview
+npm run package:webview
+```
+
+`package:webview` writes `release/vox-ui-webview-<version>.zip`. Pushing a `v*` tag publishes that zip as a GitHub release asset, which is what the mobile apps pin and embed.
 
 ## Generated files
 

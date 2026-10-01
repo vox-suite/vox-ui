@@ -3,6 +3,11 @@ export { CollectionsView } from "./components/collections-view";
 export { useCollections } from "./hooks/use-collections";
 export { errorMessage } from "./lib/errors";
 export { installPlatform, platform } from "./platform";
+export {
+  createBrowserPlatform,
+  type BrowserSession,
+  type SessionProvider,
+} from "./platform/browser";
 export type {
   Platform,
   HttpPort,
