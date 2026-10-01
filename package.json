@@ -1,0 +1,50 @@
+{
+  "name": "@vox/ui",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ui/*": "./src/components/ui/*.tsx",
+    "./logo": "./src/components/vox-logo.tsx",
+    "./utils": "./src/lib/utils.ts",
+    "./pulse": "./src/components/pulse/pulse-view.tsx",
+    "./spaces": "./src/components/spaces/spaces-view.tsx"
+  },
+  "scripts": {
+    "gen:api": "openapi-typescript ../vox-core/contracts/openapi.json -o src/features/api.gen.ts",
+    "gen:tokens": "cargo run -q --manifest-path ../vox-shared/Cargo.toml --bin gen_tokens > src/features/pulse/schema-tokens.gen.json",
+    "gen": "npm run gen:api && npm run gen:tokens",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@xyflow/react": "^12.12.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "recharts": "^3.10.1",
+    "tailwind-merge": "^3.3.0",
+    "thinking-orbs": "^0.3.2",
+    "lucide-react": "^0.511.0",
+    "radix-ui": "^1.6.7"
+  },
+  "peerDependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "eslint": "^10.11.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.12.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.70.1",
+    "vite": "^6.3.5",
+    "openapi-typescript": "^7.13.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
