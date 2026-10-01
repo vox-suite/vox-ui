@@ -41,15 +41,15 @@ export function SpaceChatPanel({
 
   const isCommitted = space.state === "committed";
 
-  useEffect(() => {
-    if (selectedNode) {
-      setEditTitle(selectedNode.title);
-      setEditBody(selectedNode.body);
-    } else {
-      setEditTitle("");
-      setEditBody("");
-    }
-  }, [selectedNode?.id, selectedNode?.title, selectedNode?.body]);
+  const nodeKey = selectedNode
+    ? `${selectedNode.id}\u0000${selectedNode.title}\u0000${selectedNode.body}`
+    : "";
+  const [syncedNodeKey, setSyncedNodeKey] = useState("");
+  if (nodeKey !== syncedNodeKey) {
+    setSyncedNodeKey(nodeKey);
+    setEditTitle(selectedNode?.title ?? "");
+    setEditBody(selectedNode?.body ?? "");
+  }
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

@@ -51,8 +51,10 @@ export function useSpace(spaceId: string | null) {
   useEffect(() => {
     if (!spaceId) return;
     let isCancelled = false;
-    void Promise.all([loadGraph(), loadMessages()]).finally(() => {
-      if (!isCancelled) setLoading(false);
+    queueMicrotask(() => {
+      void Promise.all([loadGraph(), loadMessages()]).finally(() => {
+        if (!isCancelled) setLoading(false);
+      });
     });
     return () => {
       isCancelled = true;
